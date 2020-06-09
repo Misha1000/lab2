@@ -1,6 +1,7 @@
 #include <Referee.hpp>
 
 #include <iostream>
+#include <fstream>
 
 #include <experimental/filesystem>
 
@@ -25,5 +26,12 @@ int		main(int ac, char **av)
 	{
 		referee.process_scores_in_file(file.path());
 	}
+
+	std::string file_to_write_result("results.csv");
+	{
+		std::ofstream ofs(file_to_write_result);
+		referee.print_results(ofs);
+	}
+
 	return 0;
 }
