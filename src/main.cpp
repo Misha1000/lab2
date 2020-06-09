@@ -1,4 +1,8 @@
+#include <Referee.hpp>
+
 #include <iostream>
+
+#include <experimental/filesystem>
 
 namespace {
 	void check_usage(int ac, char **av)
@@ -15,5 +19,11 @@ namespace {
 int		main(int ac, char **av)
 {
 	check_usage(ac, av);
+
+	Referee referee;
+	for (auto const& file : std::experimental::filesystem::directory_iterator(av[1]))
+	{
+		referee.process_scores_in_file(file.path());
+	}
 	return 0;
 }
