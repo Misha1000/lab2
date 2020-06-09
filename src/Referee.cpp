@@ -2,6 +2,23 @@
 
 #include <fstream>
 #include <sstream>
+#include <set>
+#include <utility>
+
+namespace {
+	struct scores_table_comparator
+	{
+		bool	operator()(std::pair<std::string, int> const& left, std::pair<std::string, int> const& right)
+		{
+			if (left.second != right.second)
+			{
+				return left.second > right.second;
+			}
+
+			return left.first > right.first;
+		}
+	};
+}// namespace
 
 /*
 **	public methods
@@ -23,9 +40,20 @@ void	Referee::process_scores_in_file(std::string const& file_name)
 
 void	Referee::print_results(std::ostream& os)
 {
-	for (auto const& country_score : _m_scores_table)
+	std::set<std::pair<std::string, int>, scores_table_comparator> to_sort(_m_scores_table.begin(), _m_scores_table.end());
+
+	const int places_to_print = 10;
+
+	int i = 0;
+	for (auto const& it : to_sort)
 	{
-		std::cout << country_score.first << ": " << country_score.second << std::endl;
+		if (i >= places_to_print)
+		{
+			break;
+		}
+
+		os << it.first << ": " << it.second << std::endl;
+		++i;
 	}
 }
 
