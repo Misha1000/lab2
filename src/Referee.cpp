@@ -73,9 +73,15 @@ void	Referee::_process_one_country_line(std::string const& line)
 	std::size_t total_scores{};
 
 	std::string token;
-	while (std::getline(ss, token, ','))
+	try {
+		while (std::getline(ss, token, ','))
+		{
+			total_scores += std::stoull(token);
+		}
+	} catch (std::exception const& e)
 	{
-		total_scores += std::stoull(token);
+		std::cout << "Exception while processing line: [" << token << "]" << std::endl;
+		throw e;
 	}
 
 	_m_scores_table[country_name] += total_scores;
